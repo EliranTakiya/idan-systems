@@ -18,7 +18,7 @@
 </div></header>
 <main>
 <section class="hero page-width" id="contact"><div class="hero-copy"><p class="eyebrow"><span></span> פתרונות מים שעובדים בשבילכם</p><h1>מים זורמים.<br><em>שקט בראש.</em></h1><p class="hero-text">שירותי אינסטלציה, דודים ומערכות מים באיכות גבוהה, עם זמינות מהירה ויחס אישי לכל לקוח.</p><div class="hero-actions"><a class="button button-primary" href="#contact-form">השאירו פרטים <i class="fa fa-arrow-left" aria-hidden="true"></i></a><a class="button button-ghost" href="tel:123456789"><i class="fa fa-phone" aria-hidden="true"></i> חייגו עכשיו</a></div><div class="trust-row"><span><i class="fa fa-check-circle"></i> שירות אמין</span><span><i class="fa fa-clock-o"></i> זמינות 24/7</span></div></div>
-<div class="form-area" id="contact-form"><div class="form-heading"><span class="form-icon"><i class="fa fa-comments"></i></span><span><strong>צריכים עזרה?</strong><small>נחזור אליכם בהקדם</small></span></div><form action="/action_page.php"><label for="fname">שם מלא</label><input type="text" id="fname" name="fname" placeholder="איך קוראים לכם?" required><label for="phone">טלפון</label><input type="tel" id="phone" name="phone" placeholder="050-0000000" required><label for="message">במה נוכל לעזור?</label><textarea id="message" name="message" rows="3" placeholder="ספרו לנו בקצרה..."></textarea><button class="submit-button" type="submit">שלחו פנייה <i class="fa fa-long-arrow-left"></i></button></form></div>
+<div class="form-area" id="contact-form"><div class="form-heading"><span class="form-icon"><i class="fa fa-comments"></i></span><span><strong>צריכים עזרה?</strong><small>נחזור אליכם בהקדם</small></span></div><form id="contact-request-form" action="https://formsubmit.co/ajax/idanywater@gmail.com" method="POST"><input type="hidden" name="_subject" value="פנייה חדשה מאתר עידן מערכות"><input type="hidden" name="_template" value="table"><label for="fname">שם מלא</label><input type="text" id="fname" name="name" placeholder="איך קוראים לכם?" required><label for="phone">טלפון</label><input type="tel" id="phone" name="phone" placeholder="050-0000000" required><label for="message">במה נוכל לעזור?</label><textarea id="message" name="message" rows="3" placeholder="ספרו לנו בקצרה..." required></textarea><button class="submit-button" type="submit"><span class="submit-label">שלחו פנייה</span> <i class="fa fa-long-arrow-left"></i></button><p id="contact-status" role="status" aria-live="polite" hidden style="margin:6px 0 0;font-size:13px"></p></form></div>
 </section>
 <section class="services-section" id="services"><div class="page-width"><div class="section-heading"><div><p class="eyebrow"><span></span> מה אנחנו עושים</p><h2>שירותים שעושים את ההבדל</h2></div><p>מהתקלה הקטנה ועד לפרויקט המלא, אנחנו כאן כדי שהמים בבית יעבדו בדיוק כמו שצריך.</p></div><div class="services-grid">
 <article class="service-card featured"><span class="service-number">01</span><span class="service-icon"><i class="fa fa-wrench"></i></span><h3>אינסטלציה ושרברבות</h3><p>טיפול בתקלות, נזילות וצנרת לפרטיים ולמוסדות.</p><a href="#contact-form">לפרטים <i class="fa fa-arrow-left"></i></a></article>
@@ -28,5 +28,60 @@
 </div></div></section>
 </main>
 <footer class="footer"><div class="page-width"><span>עידן מערכות מים</span><span>כל הזכויות שמורות © 2024</span><a href="#top">חזרה לראש <i class="fa fa-arrow-up"></i></a></div></footer>
+<script>
+const contactForm = document.getElementById("contact-request-form");
+const contactStatus = document.getElementById("contact-status");
+const submitButton = contactForm.querySelector('button[type="submit"]');
+const submitLabel = submitButton.querySelector(".submit-label");
+
+contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    contactStatus.hidden = true;
+    contactStatus.textContent = "";
+
+    const formData = new FormData(contactForm);
+    const name = String(formData.get("name") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!name || !phone || !message) {
+        contactStatus.textContent = "נא למלא את כל השדות.";
+        contactStatus.style.color = "#b42318";
+        contactStatus.hidden = false;
+        return;
+    }
+
+    submitButton.disabled = true;
+    submitLabel.textContent = "שולח...";
+
+    try {
+        const response = await fetch(contactForm.action, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify(Object.fromEntries(formData.entries())),
+        });
+        const data = await response.json();
+
+        if (!response.ok || String(data.success).toLowerCase() === "false") {
+            throw new Error(data.error || data.message || "אירעה שגיאה בשליחה");
+        }
+
+        contactForm.reset();
+        contactStatus.textContent = "ההודעה נשלחה בהצלחה! נחזור אליכם בהקדם.";
+        contactStatus.style.color = "#176b43";
+    } catch (error) {
+        console.error(error);
+        contactStatus.textContent = "אירעה שגיאה בשליחת ההודעה. נסו שוב בעוד רגע.";
+        contactStatus.style.color = "#b42318";
+    } finally {
+        contactStatus.hidden = false;
+        submitButton.disabled = false;
+        submitLabel.textContent = "שלחו פנייה";
+    }
+});
+</script>
 </body>
 </html>
