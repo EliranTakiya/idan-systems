@@ -1,0 +1,16 @@
+{
+  "name": "עידן מערכות מים",
+  "short_name": "עידן מערכות מים",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f8f7",
+  "theme_color": "#092d46",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
