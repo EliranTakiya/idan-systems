@@ -27,12 +27,20 @@
 <article class="service-card"><span class="service-number">04</span><span class="service-icon"><i class="fa fa-tint"></i></span><h3>טיהור וסינון מים</h3><p>מיניברים ומערכות סינון, כולל מכירה ושירות.</p><a href="#contact-form">לפרטים <i class="fa fa-arrow-left"></i></a></article>
 </div></div></section>
 </main>
-<footer class="footer"><div class="page-width"><span>עידן מערכות מים</span><span>כל הזכויות שמורות © 2024</span><a href="#top">חזרה לראש <i class="fa fa-arrow-up"></i></a></div></footer>
+<footer class="footer"><div class="page-width"><span>עידן מערכות מים</span><span>כל הזכויות שמורות © 2024</span><a href="#top">חזרה לראשי <i class="fa fa-arrow-up"></i></a></div></footer>
 <script>
 const contactForm = document.getElementById("contact-request-form");
 const contactStatus = document.getElementById("contact-status");
 const submitButton = contactForm.querySelector('button[type="submit"]');
 const submitLabel = submitButton.querySelector(".submit-label");
+
+document.querySelectorAll('a[href="#top"]').forEach((topLink) => {
+    topLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+    });
+});
 
 contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
